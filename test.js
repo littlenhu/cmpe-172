@@ -111,7 +111,7 @@
 
                                 // storing valid inputs into an array with date 
                                 // order_array.push(date+':'+str.replace('\n','')+':UNFILLED');
-                                order_array.push(date+':'+str.replace('\n',''));
+                                order_array.push(date+':'+str.replace('\n','')+':UNFILLED');
                                 console.log('Order to ' + str.replace('\n','') + ' worth of BTC queued @'+ market.rates[newTo_BTC],'BTC/'+message[2]+' (' + value +' BTC)');
                                 
                          }  
@@ -171,46 +171,26 @@
                         else if(message[0]=='ORDERS')
                         {
                             
-                            
+                            // displaying to file called 'data'
                              var csvStream = csv.createWriteStream({headers:false}),
-                                 writableStream = fs.createWriteStream("my.csv");
+                                 writableStream = fs.createWriteStream("data.csv");
 
                                  writableStream.on("finish", function()
                                  {
                                      callback(null);
                                  });
 
+                                csvStream.pipe(writableStream);
+                                csvStream.write(order_array);
+                                csvStream.end();
+
+
                             // outputting onto console 
                             console.log('=== CURRENT ORDERS ===');
                             underscore.each(order_array,function(array)
                             {
                                 console.log(array);
-                                csvStream.pipe(writableStream);
-                                csvStream.write(array);
-                                csvStream.end();
-
                             });
-
-                            
-
-
-
-
-
-
-
-
-                            // var csvStream = csv.createWriteStream({headers:true}),
-                            //     writableStream = fs.createWriteStream("my.csv");
-
-                            //     writableStream.on("finish", function()
-                            //     {
-                            //         console.log("DONE!");
-                            //     });
-
-                            //     csvStream.pipe(writableStream);
-                            //     csvStream.write(array);
-                            //     csvStream.end();
                         }
 
                         // if invalid syntax is enter ie buys/sells
@@ -220,39 +200,7 @@
                             return
                         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 }
                         
 
          });
-
